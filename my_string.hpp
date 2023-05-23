@@ -18,6 +18,9 @@ public:
     my_string& operator+(const my_string& other) const;
     my_string& operator+(const std::string& str) const;
     my_string& operator+(const char* str) const;
+    friend std::ostream& operator<<(std::ostream&, const my_string&);
+
+public:
     const char* c_str() const;
     int size() const;
 
