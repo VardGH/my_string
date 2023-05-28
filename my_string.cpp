@@ -37,7 +37,7 @@ my_string& my_string::operator=(const my_string& other)
         m_cap = other.m_cap;
         delete m_buf;
         m_buf = new char [m_cap + 1];
-        strcpy(m_buf, other.m_buf);
+        std::strcpy(m_buf, other.m_buf);
     }
     return *this;
 }
@@ -83,11 +83,10 @@ my_string my_string::operator+(const my_string& other) const
     tmp.m_cap = m_cap + other.m_cap;
     tmp.m_buf = new char [tmp.m_cap + 1];
 
-    strcpy(tmp.m_buf, m_buf);
-    strcpy(tmp.m_buf, other.m_buf);
+    std::strcpy(tmp.m_buf, m_buf);
+    std::strcat(tmp.m_buf, other.m_buf);
 
     return tmp;
-
 }
 
 const char* my_string::c_str() const
@@ -107,7 +106,7 @@ my_string my_string::operator+(const std::string& str) const
     tmp.m_cap = m_cap + str.size();
     tmp.m_buf = new char[tmp.m_cap + 1];
     std::strcpy(tmp.m_buf, m_buf);
-    std::strcpy(tmp.m_buf, str.c_str());
+    std::strcat(tmp.m_buf, str.c_str());
 
     return tmp;
 }
@@ -116,15 +115,56 @@ my_string my_string::operator+(const char* str) const
 {
     my_string tmp;
     
-    tmp.m_cap = m_cap + strlen(str);
+    tmp.m_cap = m_cap + std::strlen(str);
     tmp.m_buf = new char[tmp.m_cap + 1];
     std::strcpy(tmp.m_buf, m_buf);
-    std::strcpy(tmp.m_buf, str);
+    std::strcat(tmp.m_buf, str);
 
     return tmp;
 }
 
-std::ostream& operator<<(std::ostream& os , const my_string& str)
+std::ostream& operator<<(std::ostream& os, const my_string& str) {
+    os << str.c_str();
+    return os;
+}
+
+int my_string::get_cap() const {
+    return m_cap;
+}
+
+void my_string::set_cap(const int cap) {
+    if (cap <= m_cap) {
+        return;
+    }
+    m_cap = cap;
+}
+
+my_string operator+(const char* lhs, const my_string& rhs)
 {
-    return os << str.m_buf;   
+    int len = std::strlen(lhs) + rhs.size();
+
+    char* tmp = new char[len + 1];  
+    strcpy(tmp, lhs);                   
+    strcat(tmp, rhs.c_str());           
+
+    my_string res(tmp);  
+
+    delete[] tmp;  
+
+    return res;
+}
+
+my_string operator+(const std::string& lhs, const my_string& rhs)
+{
+    int len = lhs.size() + rhs.size();
+
+    char* tmp = new char[len + 1];  
+    strcpy(tmp, lhs.c_str());                   
+    strcat(tmp, rhs.c_str());           
+
+    my_string res(tmp);  
+
+    delete[] tmp;  
+
+    return res;
 }

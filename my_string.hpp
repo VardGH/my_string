@@ -20,15 +20,21 @@ public:
     my_string operator+(const my_string& other) const;
     my_string operator+(const std::string& str) const;
     my_string operator+(const char* str) const;
-    friend std::ostream& operator<<(std::ostream&, const my_string&);
 
 public:
     const char* c_str() const;
     int size() const;
+    int get_cap() const;
+    void set_cap(const int cap);
 
 private:
     int m_cap;
     char* m_buf;
 };
+
+
+my_string operator+(const char* lhs, const my_string& rhs);
+my_string operator+(const std::string& lhs, const my_string& rhs);
+std::ostream& operator<<(std::ostream& os, const my_string& str);
 
 #endif // MY_STRIING_HPP
